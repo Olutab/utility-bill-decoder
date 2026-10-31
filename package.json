@@ -1,0 +1,17 @@
+{
+  "name": "utility-bill-decoder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+    "scripts": {
+    "build:all": "node scripts/build.mjs && cd tool-app && npm install && npm run build && cd .. && node scripts/finalize-build.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "marked": "^18.1.2"
+  }
+}

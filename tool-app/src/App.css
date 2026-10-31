@@ -1,0 +1,43 @@
+.app {
+  min-height: 100vh;
+  background-color: #EEF2F6;
+}
+
+.tool-nav {
+  background: #10243A;
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #0B5FA5;
+}
+
+.nav-link {
+  color: #EEF2F6;
+  text-decoration: none;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover {
+  color: #0B5FA5;
+  text-decoration: underline;
+}
+
+.tool-title {
+  color: #EEF2F6;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .tool-nav {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}

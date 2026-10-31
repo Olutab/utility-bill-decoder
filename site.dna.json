@@ -1,0 +1,52 @@
+{
+  "dna_version": "1.0",
+  "niche": "small-business utility bill interpretation",
+  "layout_archetype": "Checklist/playbook",
+  "layout_why": "The product promises one action this week, so each page is a numbered read-your-bill walkthrough, not a dashboard clone.",
+  "navigation_model": "Category-hub pyramid",
+  "navigation_why": "2000 tariffs need state -> utility -> schedule depth for crawl paths and contextual linking; a flat top bar collapses at this size.",
+  "visual_language": "Blueprint/technical drawing",
+  "visual_why": "Meters, demand curves and load shapes are engineering objects; drafting lines signal measurement and avoid generic SaaS purple.",
+  "type_pairing": {
+    "display": "Archivo (600/700, tight tracking)",
+    "text": "Newsreader (400/500)",
+    "reason": "Archivo has tabular figures for charge tables; Newsreader stays readable for older owners on phones. Two faces only, numerals via font-variant-numeric, no third mono download."
+  },
+  "palette": {
+    "bg": "#EEF2F6",
+    "surface": "#FFFFFF",
+    "ink": "#10243A",
+    "accent": "#0B5FA5",
+    "warning": "#8A4B00",
+    "contrast_checked": {
+      "ink_on_bg": "14.9:1",
+      "ink_on_surface": "16.4:1",
+      "accent_on_bg": "5.9:1",
+      "accent_on_surface": "6.6:1",
+      "warning_on_bg": "6.0:1"
+    }
+  },
+  "motion_level": "subtle",
+  "motion_why": "All-age audience; 120ms state changes only, full prefers-reduced-motion bypass.",
+  "imagery_strategy": {
+    "photo_style": "macro/documentary of physical utility hardware: meter dials, service panels, gas risers, rooftop condensers",
+    "treatment": "cyanotype duotone at 18% over grayscale, 2px hard ink frame, no rounded corners",
+    "svg_first_rule": "LINE_ITEM and PLAN_PATTERN pages get generated blueprint SVG heroes (waveform, load shape, charge stack). A photo of a random meter adds nothing to 'what is a therm'. Photos are reserved for RATE_SCHEDULE and UTILITY_HUB pages where a real object exists. This is a deliberate deviation from photo-on-every-page; flagging it rather than hiding it.",
+    "exclusions": "no faces, no readable brand logos, no before/after savings imagery"
+  },
+  "voice": {
+    "adjectives": ["plainspoken", "forensic", "unhurried"],
+    "banned_phrases": ["slash your energy bills", "unlock savings", "game-changing"]
+  },
+  "page_type_mix": {
+    "RATE_SCHEDULE": 1400,
+    "UTILITY_HUB": 300,
+    "LINE_ITEM": 150,
+    "PLAN_PATTERN": 60,
+    "STATE_CONTEXT": 51,
+    "COMPARISON": 30,
+    "TOOL_PAGE": 9,
+    "total": 2000,
+    "wave_1": 60
+  }
+}
