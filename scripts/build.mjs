@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { marked } from 'marked';
 
+const GOOGLE_VERIFY = '<meta name="google-site-verification" content="Esl2MXvFiQBS6xZwCQSEQwKdE_mYnsAHNilOoBW1mxo" />';
 // 1. Read and parse the data
 const raw = fs.readFileSync('data/matrix.txt', 'utf8');
 const lines = raw.split('\n').filter(l => l.trim() !== '');
@@ -79,9 +80,39 @@ function getNav() {
 }
 
 function getFooter() {
-  return `<footer class="site-footer"><div class="footer-inner"><div><h3>Explore</h3><ul><li><a href="index.html">Home</a></li><li><a href="bill-terms.html">Bill Terms</a></li><li><a href="rate-patterns.html">Rate Patterns</a></li></ul></div><div><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="expert-advice.html">Expert Advice</a></li><li><a href="contact.html">Contact</a></li></ul></div><div><h3>Legal</h3><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="faq.html">FAQ</a></li></ul></div></div><div class="footer-fine">&copy; ${new Date().getFullYear()} Utility Bill Decoder. All data sourced from public records or clearly labeled estimates.</div></footer>`;
+  return `<footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="bill-terms.html">Bill Terms</a></li>
+          <li><a href="rate-patterns.html">Rate Patterns</a></li>
+          <li><a href="research-index.html">Demand Charge Index</a></li> <!-- NEW -->
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="expert-advice.html">Expert Advice</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="changelog.html">Changelog</a></li> <!-- NEW -->
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-fine">
+      &copy; ${new Date().getFullYear()} Utility Bill Decoder. All data sourced from public records or clearly labeled estimates.
+    </div>
+  </footer>`;
 }
-
 // 8. Page Generators
 function generateDataPage(row) {
   if (row.auditing_status === 'UNVERIFIED-DRAFT') return null;
@@ -131,6 +162,7 @@ function generateDataPage(row) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${GOOGLE_VERIFY}
   <title>${seo.title}</title>
   <meta name="description" content="${seo.desc}">
   <link rel="canonical" href="https://YOUR-DOMAIN.com/${row.slug}.html">
@@ -179,6 +211,7 @@ function generateStandardPage(page) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${GOOGLE_VERIFY}
   <title>${page.title} | Utility Bill Decoder</title>
   <meta name="description" content="${page.title} page for Utility Bill Decoder.">
   <link rel="canonical" href="https://YOUR-DOMAIN.com/${page.slug}.html">
@@ -207,6 +240,7 @@ function generateBillTermsPage() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${GOOGLE_VERIFY}
   <title>Bill Terms Glossary | Utility Bill Decoder</title>
   <meta name="description" content="Complete glossary of commercial utility bill line items: demand charges, energy charges, riders, and fees explained.">
   <link rel="canonical" href="https://YOUR-DOMAIN.com/bill-terms.html">
@@ -240,6 +274,7 @@ function generateRatePatternsPage() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${GOOGLE_VERIFY}
   <title>Rate Patterns | Utility Bill Decoder</title>
   <meta name="description" content="Commercial rate structures explained: flat rates, time-of-use, demand charges, and ratchet clauses.">
   <link rel="canonical" href="https://YOUR-DOMAIN.com/rate-patterns.html">
@@ -276,6 +311,7 @@ function generateIndex() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${GOOGLE_VERIFY}
   <title>Utility Bill Decoder: Commercial Energy Bill Analysis</title>
   <meta name="description" content="Professional-grade utility bill analysis for small business owners. Understand demand charges, rate structures, and optimize your commercial energy costs.">
   <link rel="canonical" href="https://YOUR-DOMAIN.com/index.html">

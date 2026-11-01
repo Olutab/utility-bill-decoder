@@ -1,10 +1,10 @@
 import fs from 'fs';
 
-// Ensure the dist/tool directory exists
-if (!fs.existsSync('dist/tool')) {
-  fs.mkdirSync('dist/tool', { recursive: true });
-}
+// Ensure directories exist
+if (!fs.existsSync('dist/tool')) fs.mkdirSync('dist/tool', { recursive: true });
+if (!fs.existsSync('dist/comparisons')) fs.mkdirSync('dist/comparisons', { recursive: true });
 
-// Copy the built React tool into the main dist folder
+// Copy the built React tool
 fs.cpSync('tool-app/dist', 'dist/tool', { recursive: true });
-console.log('✅ Tool successfully copied to dist/tool');
+
+console.log('✅ Tool and Comparison directories finalized.');
