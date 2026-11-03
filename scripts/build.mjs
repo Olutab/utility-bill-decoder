@@ -27,6 +27,7 @@ if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist');
 }
 fs.cpSync('site-assets', 'dist/site-assets', { recursive: true });
+if (fs.existsSync('robots.txt')) fs.copyFileSync('robots.txt', 'dist/robots.txt');
 
 // 3. SEO & Content Helpers
 function getSEO(row) {
