@@ -3,13 +3,24 @@ import { marked } from 'marked';
 
 const GOOGLE_VERIFY = '<meta name="google-site-verification" content="Esl2MXvFiQBS6xZwCQSEQwKdE_mYnsAHNilOoBW1mxo" />';
 // 1. Read and parse the data
-const raw = fs.readFileSync('data/matrix.txt', 'utf8');
-const lines = raw.split('\n').filter(l => l.trim() !== '');
-const headers = lines[0].split('|');
-const rows = lines.slice(1).map(line => {
-  const cols = line.split('|');
-  return headers.reduce((obj, h, i) => ({ ...obj, [h]: cols[i] || '' }), {});
-});
+// 1. Read and parse BOTH data files
+function parseFile(filePath) {
+  if (!fs.existsSync(filePath)) return [];
+  const raw = fs.readFileSync(filePath, 'utf8');
+  const lines = raw.split('\n').filter(l => l.trim() !== '');
+  if (lines.length <= 1) return []; // Empty or header only
+  const headers = lines[0].split('|');
+  return lines.slice(1).map(line => {
+    const cols = line.split('|');
+    return headers.reduce((obj, h, i) => ({ ...obj, [h]: cols[i] || '' }), {});
+  });
+}
+
+const manualRows = parseFile('data/matrix.txt');
+const urdbRows = parseFile('data/urdb_rates.txt');
+const rows = [...manualRows, ...urdbRows]; // Combine them!
+
+console.log(`📊 Loaded ${manualRows.length} manual rows and ${urdbRows.length} URDB rows.`);
 
 // 2. Create the output folder and copy the design system
 if (!fs.existsSync('dist')) {
@@ -129,8 +140,8 @@ function generateDataPage(row) {
   let structuralContext = '';
   if (row.category === 'LINE_ITEM') {
     structuralContext = `<p>Utilities impose this specific charge to recover the capital and operational costs of maintaining grid reliability. For ${row.primary_lever.replace('_', ' ').toLowerCase()} scenarios, this ensures the infrastructure can handle sudden spikes in demand without causing localized brownouts or requiring expensive emergency power purchases.</p>`;
-  } else if (row.category === 'PLAN_PATTERN') {
-    structuralContext = `<p>This rate design is intentionally structured by regulatory commissions to incentivize specific customer behaviors. By pricing electricity differently based on ${row.rate_structure.replace('_', ' ').toLowerCase()} parameters, utilities aim to flatten the overall grid load and defer the need for building new power plants.</p>`;
+    } else if (row.category === 'RATE_SCHEDULE') {
+    structuralContext = `<p>This specific tariff is filed by ${row.utility_name} with the ${row.state_code} public utility commission. It dictates exactly how your facility's energy and demand consumption is priced, and serves as the legal basis for your monthly commercial billing.</p>`;
   } else {
     structuralContext = `<p>This classification is used by public utility commissions to standardize billing practices across similar facility types, ensuring equitable cost distribution among all ratepayers in the service territory.</p>`;
   }
@@ -165,11 +176,11 @@ function generateDataPage(row) {
   ${GOOGLE_VERIFY}
   <title>${seo.title}</title>
   <meta name="description" content="${seo.desc}">
-  <link rel="canonical" href="https://YOUR-DOMAIN.com/${row.slug}.html">
+  <link rel="canonical" href="https://all-utility.netlify.app/${row.slug}.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="${seo.title}">
   <meta property="og:description" content="${seo.desc}">
-  <meta property="og:image" content="https://YOUR-DOMAIN.com/og/${row.slug}.svg">
+  <meta property="og:image" content="https://all-utility.netlify.app/og/${row.slug}.svg">
   ${noIndexTag}
   <link rel="stylesheet" href="site-assets/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
@@ -214,11 +225,11 @@ function generateStandardPage(page) {
   ${GOOGLE_VERIFY}
   <title>${page.title} | Utility Bill Decoder</title>
   <meta name="description" content="${page.title} page for Utility Bill Decoder.">
-  <link rel="canonical" href="https://YOUR-DOMAIN.com/${page.slug}.html">
+  <link rel="canonical" href="https://all-utility.netlify.app/${page.slug}.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="${page.title} | Utility Bill Decoder">
   <meta property="og:description" content="Understand your commercial energy bill with Utility Bill Decoder.">
-  <meta property="og:image" content="https://YOUR-DOMAIN.com/og/${page.slug}.svg">
+  <meta property="og:image" content="https://all-utility.netlify.app/og/${page.slug}.svg">
   <link rel="stylesheet" href="site-assets/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
 </head>
@@ -243,11 +254,11 @@ function generateBillTermsPage() {
   ${GOOGLE_VERIFY}
   <title>Bill Terms Glossary | Utility Bill Decoder</title>
   <meta name="description" content="Complete glossary of commercial utility bill line items: demand charges, energy charges, riders, and fees explained.">
-  <link rel="canonical" href="https://YOUR-DOMAIN.com/bill-terms.html">
+  <link rel="canonical" href="https://all-utility.netlify.app/bill-terms.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Bill Terms Glossary | Utility Bill Decoder">
   <meta property="og:description" content="Complete glossary of commercial utility bill line items.">
-  <meta property="og:image" content="https://YOUR-DOMAIN.com/og/bill-terms.svg">
+  <meta property="og:image" content="https://all-utility.netlify.app/og/bill-terms.svg">
   <link rel="stylesheet" href="site-assets/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
 </head>
@@ -277,11 +288,11 @@ function generateRatePatternsPage() {
   ${GOOGLE_VERIFY}
   <title>Rate Patterns | Utility Bill Decoder</title>
   <meta name="description" content="Commercial rate structures explained: flat rates, time-of-use, demand charges, and ratchet clauses.">
-  <link rel="canonical" href="https://YOUR-DOMAIN.com/rate-patterns.html">
+  <link rel="canonical" href="https://all-utility.netlify.app/rate-patterns.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Rate Patterns | Utility Bill Decoder">
   <meta property="og:description" content="Commercial rate structures explained.">
-  <meta property="og:image" content="https://YOUR-DOMAIN.com/og/rate-patterns.svg">
+  <meta property="og:image" content="https://all-utility.netlify.app/og/rate-patterns.svg">
   <link rel="stylesheet" href="site-assets/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
 </head>
@@ -314,11 +325,11 @@ function generateIndex() {
   ${GOOGLE_VERIFY}
   <title>Utility Bill Decoder: Commercial Energy Bill Analysis</title>
   <meta name="description" content="Professional-grade utility bill analysis for small business owners. Understand demand charges, rate structures, and optimize your commercial energy costs.">
-  <link rel="canonical" href="https://YOUR-DOMAIN.com/index.html">
+  <link rel="canonical" href="https://all-utility.netlify.app/index.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Utility Bill Decoder: Commercial Energy Bill Analysis">
   <meta property="og:description" content="Professional-grade utility bill analysis for small business owners.">
-  <meta property="og:image" content="https://YOUR-DOMAIN.com/og/index.svg">
+  <meta property="og:image" content="https://all-utility.netlify.app/og/index.svg">
   <link rel="stylesheet" href="site-assets/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Newsreader:wght@400;500&display=swap" rel="stylesheet">
 </head>
